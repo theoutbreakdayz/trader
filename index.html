@@ -1,0 +1,1980 @@
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+</head>
+<style>
+  /* General Layout and Body Styling */
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #191521;
+    margin: 0;
+    padding: 0;
+    display: center;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+
+  /* Main container styles */
+  .calculator,
+  .container,
+  .roles-container {
+    display: flex;
+    flex-direction: column;
+    max-width: 380px;
+    width: 100%;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #070212;
+    color: #d96057;
+    border: 4px solid #2b2727;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: left;
+    margin-bottom: -24px;
+  }
+
+  /* Specific styling for roles-container to align buttons and roles */
+  .roles-container {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    padding: 20px;
+  }
+
+  .button-column {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100px;
+  }
+
+  .roles-column {
+    display: flex;
+    flex-grow: 1;
+    justify-content: space-between;
+    margin-left: 20px;
+    font-family: Tahoma, sans-serif;
+    font-size: 12px;
+  }
+
+  .roles-column>div {
+    width: 50%;
+  }
+
+  /* Button styling for roles and actions */
+  .role-btn,
+  .action-btn {
+    padding: 10px 10px;
+    color: black;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    border: 2px solid darkgrey;
+  }
+
+  .role-btn {
+    background-color: grey;
+    color: darkgrey;
+    padding: 1px 1px;
+    font-size: 11px;
+    width: 125px;
+    height: 30px;
+    margin: 2px;    
+    display: inline-block;
+    text-align: center;
+  }
+
+  .role-btn:hover {
+    background-color: red;
+    color: white;
+    transform: scale(1.2);
+  }
+
+  .role-btn.active {
+    background-color: orange;
+    color: white;
+  }
+
+  .action-btn {
+    width: 100%;
+    background-color: grey;
+    transform: scale(1.2);
+  }
+
+  #calculateBtn {
+    background-color: green;
+    color: black;
+    font-weight: bold;
+  }
+
+  #clearAllBtn {
+    background-color: red;
+    color: black;
+    font-weight: bold;
+  }
+
+  #clearRolesBtn {
+    background-color: lightblue;
+    font-weight: bold;
+  }
+
+  .addBtn {
+    background-color: #4caf50;
+    color: black;
+    border: none;
+    padding: 0px 20px;
+    text-align: center;
+    display: inline-block;
+    font-size: 30px;
+    margin: 4px 2px;
+    transition-duration: 1s;
+    cursor: pointer;
+    border-radius: 50px;
+  }
+
+  .addBtn:hover {
+    background-color: lightgreen;
+    transform: scale(1.2);
+  }
+
+  .action-btn:hover {
+    opacity: 0.4;
+    transform: scale(1.1);
+  }
+
+  /* Styles for headings and tabs */
+  h1,
+  h2 {
+    text-align: center;
+    font-size: 22px;
+    margin-bottom: 10px;
+  }
+
+  .tab {
+    overflow: hidden;
+    border: 4px solid #2b2727;
+    background-color: #171721;
+    border-radius: 20px;
+  }
+
+  .tab button {
+    background-color: #171721;
+    width: 160px;
+    color: darkgrey;
+    font-weight: bold;
+    float: left;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 10px 10px;
+    transition: 0.2s;
+    font-family: Calibri, sans-serif;
+    border-radius: 5px;
+    margin: 5px;
+    margin-left: 15px;
+  }
+
+  .tab button:hover {
+    background-color: red;
+    transform: scale(1.05);
+  }
+
+  .tab button.active {
+    background-color: darkgrey;
+    font-size: 18px;
+    padding: 7px 5px;
+    color: black;
+  }
+
+  .tabcontent,
+  .roles-content {
+    display: none;
+    padding: 6px 16px;
+    border: 4px solid #2b2727;
+    border-radius: 20px;
+    margin-bottom: 10px;
+    margin-top: -3px;
+    min-height: 300px;
+    min-height: flex;
+  }
+
+  .item-price,
+  .inline,
+  .roles-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 15px;
+  }
+
+  .item-price select,
+  .calculator input[type="number"] {
+    padding: 8px;
+    border: 3px solid #2b2727;
+    border-radius: 22px;
+    background-color: #694542;
+    color: black;
+  }
+
+  .item-price span {
+    width: 45%;
+    text-align: right;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  .summary,
+  .roles-content {
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+
+  .roles-container .role-label {
+    font-size: 50%;
+    display: inline-block;
+    background-color: grey;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 20px;
+    margin: 0 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    border: 1px solid lightgrey;
+  }
+
+  .roles-container .role-label.active {
+    background-color: #add8e6;
+    color: white;
+  }
+
+  .summary {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+
+  .summary div {
+    font-size: 14px;
+    font-family: Arial Unicode MS, sans-serif;
+    color: lightgrey;
+    margin: 2px;
+    margin-left: 12px;
+    text-align: left;
+    width: 100%;
+  }
+
+  /* Style for the 'x' remove buttons in the summary */
+  .summary .removeOneBtn {
+    background-color: orange;
+    color: black;
+    border: none;
+    border-radius: 50%;
+    padding: 3px 6px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.2s;
+  }
+
+  .summary .removeOneBtn:hover {
+    background-color: darkorange;
+    transform: scale(1.2);
+  }
+
+  .summary .removeAllBtn {
+    background-color: red;
+    color: black;
+    border: none;
+    border-radius: 50%;
+    padding: 3px 6px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.2s;
+  }
+
+  .summary .removeAllBtn:hover {
+    background-color: darkred;
+    transform: scale(1.2);
+  }
+
+  /* Style for quantity labels */
+  .tabcontent label {
+    margin-right: 5px;
+  }
+
+  #buyItemButtons,
+  #itemButtons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+  }
+
+  .item-button {
+    display: inline-block;
+    width: 135px;
+    padding: 10px;
+    padding-left: 2px;
+    margin: 5px;
+    font-size: 11.5px;
+
+    background-color: #444;
+    color: white;
+    border: 2px solid darkgrey;
+    text-align: center;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.2s, transform 0.2s;
+    white-space: nowrap;
+  }
+
+  .item-button:hover {
+    background-color: #555;
+    transform: scale(1.08);
+  }
+
+  .return-button {
+    background-color: red;
+    color: black;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    font-weight: bold;
+    border-radius: 50px;
+    transition: background-color 0.3s, transform 0.3s;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+  }
+
+  .return-button:hover {
+    background-color: darkred;
+    transform: scale(1.1);
+  }
+
+  .logo {
+    width: 100%;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+  }
+</style>
+
+<body>
+  <div class="calculator">
+    <h1><img src="logo.png" alt="935 Trading Calculator" class="logo">
+      <h1>
+
+        <!-- Tabs -->
+        <div class="tab">
+          <button class="tablinks" data-tab="buyTab">Buy</button>
+          <button class="tablinks" data-tab="sellTab">Sell</button>
+        </div>
+
+        <!-- Buy Tab -->
+        <div class="tabcontent" align="left" id="buyTab">
+          <div id="buyItemButtons" style="position: relative;">
+            <!-- Buttons for categories/items will be dynamically added here -->
+          </div>
+          <div id="buySummary" class="summary"></div>
+        </div>
+
+        <!-- Sell Tab -->
+        <div class="tabcontent" id="sellTab">
+          <div id="itemButtons" style="position: relative;">
+            <!-- Buttons for categories/items will be dynamically added here -->
+          </div>
+          <div id="sellSummary" class="summary"></div>
+        </div>
+  </div>
+
+  <!-- Roles Container -->
+  <div class="roles-container">
+    <div class="button-column">
+      <button id="calculateBtn" class="action-btn">Calculate</button>
+      <button id="clearAllBtn" class="action-btn">Clear All</button>
+      <button id="clearRolesBtn" class="action-btn">Clear Roles</button>
+    </div>
+    <div class="roles-column">
+      <div id="roleColumn1"></div>
+      <div id="roleColumn2"></div>
+    </div>
+  </div>
+<script>
+  // Define Items and Prices
+  const buyitems = {
+    "Weapons": {
+      Guns: {
+        Automatic: [{
+            name: "Aug AX",
+            price: 3000
+          },
+          {
+            name: "M4A1",
+            price: 3500
+          },
+          {
+            name: "KAM",
+            price: 2000
+          },
+          {
+            name: "Vaiga",
+            price: 2000
+          }
+        ],
+        Ranged: [{
+            name: "LAR",
+            price: 2500
+          },
+          {
+            name: "DMR",
+            price: 3000
+          },
+          {
+            name: "M70 Tundra",
+            price: 2500
+          },
+          {
+            name: "VS89",
+            price: 2500
+          },
+          {
+            name: "VSD",
+            price: 2500    
+          },
+          {
+            name: "Mosin",
+            price: 2000
+          }
+        ],
+        Misc: [{
+            name: "Crossbow",
+            price: 1500
+          }
+        ],
+        Pistols: [{
+            name: "Revolver",
+            price: 750
+          },
+          {
+            name: "Engraved Kolt",
+            price: 750
+          },
+          {
+            name: "Deagle",
+            price: 750
+          },
+          {
+            name: "MKII Pistol",
+            price: 750
+          },
+          {
+            name: "CR-75",
+            price: 750
+          },
+          {
+            name: "Mlock",
+            price: 750
+          }
+        ]
+      },
+      Melee: [{
+          name: "Fange Knife",
+          price: 250
+        },
+        {
+          name: "Combat Knife",
+          price: 250
+        },
+        {
+          name: "Hunter Knife",
+          price: 250
+        }
+      ],
+      Attachments: {
+        Suppressors: [{
+            name: "Standardized Suppressor",
+            price: 1000
+          },
+          {
+            name: "Normalized Suppressor",
+            price: 1000
+          },
+          {
+            name: "Pistol Suppressor",
+            price: 250
+          },
+          {
+            name: "Bottle Suppressor",
+            price: 100
+          }
+        ],
+        "Weapon Parts": [{
+            name: "LAR Lightweight Buttstock",
+            price: 100
+          },
+          {
+            name: "LAR Polymer Buttstock",
+            price: 100
+          },
+          {
+            name: "M4 CQB Buttstock",
+            price: 100
+          },
+          {
+            name: "M4 Polymer Handguard",
+            price: 100
+          },
+          {
+            name: "M4 MP Handguard",
+            price: 100
+          },
+          {
+            name: "KA Handguard",
+            price: 100
+          },
+          {
+            name: "KA Buttstock",
+            price: 100
+          }
+        ]
+      },
+      Optics: {
+        "Short Range": [{
+            name: "Red Dot (Baraka)",
+            price: 300
+          },
+          {
+            name: "Kobra Sights",
+            price: 300
+          },
+          {
+            name: "RVN Sights",
+            price: 300
+          },
+          {
+            name: "PSO-1 Scope",
+            price: 300
+          },
+          {
+            name: "BUIS Optic",
+            price: 300
+          }
+        ],
+        "Long Range": [{
+            name: "ATOG 4x",
+            price: 300
+          },
+          {
+            name: "ATOG 6x",
+            price: 300
+          },
+          {
+            name: "PU Scope",
+            price: 300
+          },
+          {
+            name: "Hunter Scope",     //add new scopes
+            price: 300
+          }
+        ],
+        "NV Optics": [{
+            name: "Starlight NV",
+            price: 2000              
+          },
+          {
+            name: "Kazuar NV",
+            price: 2000             
+          }
+        ]
+      },
+      Magazines: {
+        "Auto Mags": [{
+            name: "40 Round C-Mag",
+            price: 500
+          },
+          {
+            name: "60 Round C-Mag",
+            price: 800
+          },
+          {
+            name: "30 Round KAM Poly Mag",
+            price: 200
+          },
+          {
+            name: "75 Round KAM Drum Mag",
+            price: 600
+          },
+          {
+            name: "20 Round Vaiga Drum Mag",
+            price: 200
+          },
+          {
+            name: "30 Round AUR Mag",
+            price: 350
+          }
+        ],
+        "Sniper Mags": [{
+            name: "20 Round DMR Mag",
+            price: 600
+          },
+          {
+            name: "20 Round LAR Mag",
+            price: 600
+          },
+          {
+            name: "10 Round VSD Mag",
+            price: 300
+          },
+          {
+            name: "10 Round VS89 Mag",
+            price: 300
+          }
+        ],
+        "Pistol Mags": [{
+            name: "Deagle Mag",
+            price: 250
+          },
+          {
+            name: "Kolt Mag",
+            price: 250
+          },
+          {
+            name: "MKII Mag",
+            price: 250
+          },
+          {
+            name: "CR-75 Mag",
+            price: 250
+          },
+          {
+            name: "Mlock Mag",
+            price: 250
+          }
+        ]
+      },
+      "Ammo": [{
+          name: ".357",
+          price: 100,
+          bulkOptions: [1, 5, 10]
+        },
+        {
+          name: "9x39 AP",
+          price: 300,
+          bulkOptions: [1, 5, 10]
+        },
+        {
+          name: "9x19mm",
+          price: 100,
+          bulkOptions: [1, 5, 10]
+        },
+        {
+          name: "5.56x45",
+          price: 250,
+          bulkOptions: [1, 5, 10]
+        },
+        {
+          name: ". WIN",
+          price: 500,
+          bulkOptions: [1, 5, 10]
+        },
+        {
+          name: "545x39",
+          price: 250,
+          bulkOptions: [1, 5, 10]
+        },
+        {
+          name: "7.62x39",
+          price: 100,
+          bulkOptions: [1, 5, 10]
+        },
+        {
+          name: "7.62x54mmR",
+          price: 500,
+          bulkOptions: [1, 5, 10]
+        },
+        {
+          name: ".45ACP",
+          price: 100,
+          bulkOptions: [1, 5, 10]
+        },
+        {
+          name: "12GA Buck",
+          price: 100,
+          bulkOptions: [1, 5, 10]
+        },
+        {
+          name: "12GA Bean",
+          price: 100,
+          bulkOptions: [1, 5, 10]
+        },
+        {
+          name: "Crossbow Bolts",
+          price: 400,
+          bulkOptions: [1, 2, 5]
+        },
+        {
+          name: ".22LR",
+          price: 100,
+          bulkOptions: [1, 5, 10]
+        }
+      ]
+    },
+    "Clothing": {
+      Headgear: [{
+          name: "Assault Helmet",
+          price: 850
+        },
+        {
+          name: "Assault Visor",
+          price: 150
+        },
+        {
+          name: "Tactical Helm",
+          price: 600
+        },
+        {
+          name: "NV Goggles",
+          price: 2500
+        },
+        {
+          name: "NVG Strap",
+          price: 300
+        },
+        {
+          name: "Witch Hood",
+          price: 500
+        },
+        {
+          name: "BDU Helmet",
+          price: 800
+        },
+        {
+          name: "Desert Helmet",
+          price: 800
+        },
+        {
+          name: "Woodland Helmet",
+          price: 800
+        }
+      ],
+      Jackets: [{
+          name: "BDU Jacket",
+          price: 600
+        },
+        {
+          name: "Combat Jacket",
+          price: 600
+        },
+        {
+          name: "Field Jacket",
+          price: 600
+        },
+        {
+          name: "CUU Jacket",
+          price: 600
+        },
+        {
+          name: "Hunter Jacket",
+          price: 600
+        }
+      ],
+      Backpacks: [{
+          name: "Field Bag",
+          price: 750
+        },
+        {
+          name: "Hunter Backpack",
+          price: 400
+        },
+        {
+          name: "Skull Backpack",
+          price: 500
+        },
+        {
+          name: "Combat Backpack",
+          price: 400
+        },
+        {
+          name: "Black Drybag",
+          price: 400
+        },
+        {
+          name: "Assault Bag",
+          price: 200
+        },
+        {
+          name: "Black Sling",     //add black sling bags for 200
+          price: 200
+        }
+      ],
+      "Plate Carriers": [{
+          name: "Plate Carrier",
+          price: 2000
+        },
+        {
+          name: "Pouches",
+          price: 250
+        },
+        {
+          name: "Holster",
+          price: 50
+        }
+      ],
+      Pants: [{
+          name: "BDU Pants",
+          price: 500
+        },
+        {
+          name: "Combat Pants",
+          price: 500
+        },
+        {
+          name: "Cargo Pants",
+          price: 500
+        },
+        {
+          name: "CUU Pants",
+          price: 500
+        },
+        {
+          name: "Hunter Pants",
+          price: 500
+        }
+      ],
+      "Misc Clothing": [{
+          name: "Gloves",
+          price: 250
+        },
+        {
+          name: "Sheath",
+          price: 100
+        },
+        {
+          name: "Belt",
+          price: 100
+        },
+        {
+          name: "Hip Pack",    //add party pack
+          price: 300
+        }
+      ],
+      Boots: [{
+          name: "Black Assault Boots",
+          price: 500
+        },
+	{
+          name: "Anarchy Boots",
+          price: 500
+        },
+        {
+          name: "Tan Jungle Boots",
+          price: 300
+        },
+        {
+          name: "Green Jungle Boots",
+          price: 300
+        },
+        {
+          name: "Hunter Boots",
+          price: 300
+        }
+      ],
+      Ghillie: [{
+          name: "Ghillie Suit",
+          price: 2000
+        },
+        {
+          name: "Ghillie Hood",
+          price: 750
+        },
+        {
+          name: "Ghillie Rifle Wrap",
+          price: 500
+        }
+      ],
+      Face: [{
+          name: "Green Bandana",
+          price: 250
+        },
+        {
+          name: "Black Bandana",
+          price: 250
+        },
+        {
+          name: "Camo Bandana",
+          price: 250
+        },
+        {
+          name: "Green Ski Mask",
+          price: 200
+        },
+        {
+          name: "Black Ski Mask",
+          price: 200
+        },
+        {
+          name: "Skull Ski Mask",     
+          price: 200
+        },
+        {
+          name: "BDU Ski Mask", 
+          price: 200
+        },
+        {
+          name: "Chain Ski Mask",  
+          price: 200
+        },
+        {
+          name: "Piggy Ski Mask",
+          price: 200
+        },
+	{
+          name: "Shemagh Headwrap",
+          price: 1000
+        },
+        {
+          name: "Mime Mask",
+          price: 250
+        },
+        {
+          name: "Ski Goggles",
+          price: 500
+        }
+      ]
+    },
+    "Meds & Tools": {
+      Pharmaceuticals: [
+        {
+          name: "NBC Filters",
+          price: 1000,
+          bulkOptions: [1, 2, 5]
+        },
+        {
+          name: "Bandages",
+          price: 200
+        },
+        {
+          name: "Saline Bag",
+          price: 400
+        },
+        {
+          name: "Tetracycline",
+          price: 500
+        },
+        {
+          name: "Charcoal Tablets",
+          price: 500
+        },
+        {
+          name: "Multi Vitamins",
+          price: 100
+        },
+        {
+          name: "PoX Antidote",
+          price: 1000
+        },
+        {
+          name: "Codeine Pills",
+          price: 500                
+        },
+        {
+          name: "Morphine Injector",
+          price: 300
+        },
+        {
+          name: "Blood Test Kit",
+          price: 100
+        },
+        {
+          name: "Blood Collection Kit",
+          price: 200
+        },
+        {
+          name: "IV Start Kit",
+          price: 100
+        },
+        {
+          name: "Chlorine Tablets",
+          price: 150
+        },
+	{
+          name: "Chelating Tablets",
+          price: 500
+        }
+      ],
+      Miscellaneous: [{
+          name: "Canteen",
+          price: 200
+        },
+        {
+          name: "Tourist Map",
+          price: 400
+        },
+        {
+          name: "9V Batteries",
+          price: 25,
+          bulkOptions: [1, 5, 10]
+        },
+        {
+          name: "Bear Trap",
+          price: 500
+        },
+        {
+          name: "Construction Light",
+          price: 400
+        },
+        {
+          name: "Cable Reel",
+          price: 400
+        },
+        {
+          name: "Faction Flags",
+          price: 500
+        },
+        {
+          name: "Power Generator",
+          price: 800
+        },
+        {
+          name: "Megaphone",
+          price: 300
+        },
+        {
+          name: "Gun Cleaning Kit",
+          price: 400
+        },
+        {
+          name: "Duct Tape",
+          price: 200
+        },
+        {
+          name: "Sewing Kit",
+          price: 300
+        },
+        {
+          name: "Leather Repair Kit",
+          price: 300
+        },
+        {
+          name: "Epoxy Putty",
+          price: 400
+        },
+        {
+          name: "Rangefinder",
+          price: 400
+        },
+        {
+          name: "Canned Bacon",
+          price: 200
+        },            
+        {
+          name: "Water Bottle",
+          price: 100
+        },
+        {
+          name: "Soda",
+          price: 100
+        },
+	{
+          name: "Gas Stove",
+          price: 1000
+        },
+                {
+          name: "Cooking Pot",
+          price: 500
+        },
+	{
+          name: "Filtering Bottle",
+          price: 1000
+        },
+	{
+          name: "Fishing Rod",
+          price: 1000
+        },
+                  {
+          name: "Fishing Hook",
+          price: 500
+        }
+      ]
+    },
+    Explosives: {
+      "IED Components": [{
+          name: "IED Container",
+          price: 400
+        },
+        {
+          name: "Plastic Explosives",
+          price: 5000
+        },
+        {
+          name: "Detonator",
+          price: 100
+        },
+        {
+          name: "IED Complete",
+          price: 10500,
+          bulkOptions: [1, 2, 5]
+        }
+      ],
+      "Other Explosives": [{
+          name: "US/RUS Grenades",
+          price: 750,
+          bulkOptions: [1, 5, 10]
+        },
+        {
+          name: "POX Vial",
+          price: 500,
+          bulkOptions: [1, 2, 5]
+        },
+        {
+          name: "Flashbangs",
+          price: 250,
+          bulkOptions: [1, 2, 5]
+        },
+        {
+          name: "Land Mines",
+          price: 750,
+          bulkOptions: [1, 5, 10]
+        },
+        {
+          name: "Claymores",
+          price: 1000
+        }
+      ]
+    },
+    Storage: [{
+        name: "Car Tent",
+        price: 3500     
+      },
+      {
+        name: "Large Tent",
+        price: 2500
+      },  
+      {
+        name: "Canopy Tent",
+        price: 1600
+      },
+      {
+        name: "Medium Tent",
+        price: 2000
+      }, 
+      {
+        name: "Sea Chest",
+        price: 800
+      },
+      {
+        name: "Barrel",
+        price: 1000,
+        bulkOptions: [1, 2, 5]
+      },
+      {
+        name: "Ammo Box",
+        price: 50,
+        bulkOptions: [1, 2, 5]
+      }
+    ],
+    "Building": [{
+        name: "Box of Nails",
+        price: 2500,
+        bulkOptions: [1, 5, 10, 20]
+      },
+      {
+        name: "Sharpening Stones",
+        price: 1000,
+        bulkOptions: [1, 5, 10, 20]
+      },
+      {
+        name: "4Dial Combo Lock",
+        price: 1000,
+        bulkOptions: [1, 5, 10]
+      },
+      {
+        name: "Hatchet",
+        price: 1000
+      },
+      {
+        name: "Hacksaws",
+        price: 1000
+      },
+      {
+        name: "Sledgehammer",
+        price: 1000
+      },
+      {
+        name: "Pickaxe",
+        price: 1000
+      },
+      {
+        name: "Field Shovel",
+        price: 1000
+      },
+      {
+        name: "Crowbar",
+        price: 1000
+      },
+      {
+        name: "Fireaxe",
+        price: 1000
+      },
+      {
+        name: "Metal Wire",
+        price: 500,
+        bulkOptions: [1, 2, 5]
+      },
+      {
+        name: "Barbwire",
+        price: 1000,
+        bulkOptions: [1, 2, 5]
+      },
+      {
+        name: "Pliers",
+        price: 1000
+      },
+      {
+        name: "Camo Netting",
+        price: 500
+      },
+      {
+        name: "Rope",
+        price: 250,
+        bulkOptions: [1, 5, 10]
+      },
+      {
+        name: "Sheet Metal",
+        price: 3000
+      }
+    ],
+
+    "Vehicles": {
+      "Repair": [{
+          name: "Jerry Can",
+          price: 200
+        },
+        {
+          name: "Blowtorch",
+          price: 500
+        },
+        {
+          name: "Gas Canister",
+          price: 250
+        },
+        {
+          name: "Tire Repair Kit",
+          price: 250
+        },
+        {
+          name: "Battery Charger",
+          price: 500
+        }
+      ],
+      "Parts": [{
+          name: "Spark Plug",
+          price: 200
+        },
+        {
+          name: "Glow Plug",
+          price: 500
+        },
+        {
+          name: "Car Battery",
+          price: 200
+        },
+        {
+          name: "Truck Battery",
+          price: 400
+        },
+        {
+          name: "Car Radiator",
+          price: 500
+        },
+        {
+          name: "Headlight Bulb",
+          price: 100
+        }
+      ],
+      "Tires": [{
+          name: "Car Tires",
+          price: 250
+        },
+        {
+          name: "Humvee Tires",
+          price: 800
+        },
+        {
+          name: "Truck Tires",
+          price: 500
+        }
+      ]
+    }
+  };
+
+  const sellitems = [{
+      name: "Hockey Stick",
+      price: 750,
+      bulkOptions: [1, 5, 10]
+    },
+    {
+      name: "Meat Tenderizers",
+      price: 300,
+      bulkOptions: [1, 5, 10]
+    },
+    {
+      name: "Cigarettes",
+      price: 100,
+      bulkOptions: [1, 10, 50, 100]
+    },
+    {
+      name: "Books",
+      price: 250,
+      bulkOptions: [1, 5, 20]
+    },
+    {
+      name: "Bible",
+      price: 10000
+    },
+    {
+      name: "Golden Deagle",
+      price: 25000
+    },
+    {
+      name: "Faction Flag",
+      price: 5000
+    },
+    {
+      name: "Set of 4 Teddy Bears",
+      price: 2000,
+      bulkOptions: [1]
+    },
+    {
+      name: "Cannabis",
+      price: 10,
+      bulkOptions: [1, 10, 50, 100]
+    },
+    {
+      name: "Tanned Leather",
+      price: 300,
+      bulkOptions: [1, 8]
+    }
+  ];
+
+  const pelts = [{
+      name: "Deer Pelt",
+      price: 400,
+      bulkOptions: [1, 5, 10]
+    },
+    {
+      name: "Boar Pelt",
+      price: 600,
+      bulkOptions: [1, 5, 10]
+    },
+    {
+      name: "Wolf Pelt",
+      price: 600,
+      bulkOptions: [1, 5, 10]
+    },
+    {
+      name: "Bear Pelt",
+      price: 1000,
+      bulkOptions: [1, 5, 10]
+    },
+    {
+      name: "Fox Pelt",
+      price: 300,
+      bulkOptions: [1, 5, 10]
+    },
+    {
+      name: "Rabbit Pelt",
+      price: 250,
+      bulkOptions: [1, 5, 10]
+    }            
+  ];
+
+  const roles = {
+    Kamikaze: {
+      description: "Blow yourself up, killing 2 enemy players.",
+      discounts: {
+        "US/RUS Grenades": 25
+      }
+    },
+    Librarian: {
+      description: "Sell 350 books and 1 bible in one sale.",
+      bonuses: {
+        Books: 500 //new price sold for
+      }
+    },
+    Mayweather: {
+      description: "Win a boxing tournament.",
+      discounts: {
+        Gloves: 100
+      }
+    },
+    "Daryl Dixon": {
+      description: "Kill a fully kitted player with a crossbow.",
+      discounts: {
+        "Crossbow": 50,
+        "Crossbow Bolts": 50
+      }
+    },
+    Negan: {
+      description: "Kill a fully geared player with a barbed or nail bat.",
+      discounts: {
+        "Box of Nails": 20
+      }
+    },
+    "Build-A-Bear": {
+      description: "Turn in 5 sets of teddy bears at one time (four different colors = a set).",
+      bonuses: {
+        "Set of 4 Teddy Bears": 5000 
+      }
+    },
+    "Head Hunter": {
+      description: "Hit 100 kills by headshot.",
+      discounts: {
+        ".357": 50,
+        "9x39 AP": 50,
+        "9x19mm": 50,
+        "5.56x45": 50,
+        ".308 WIN": 50,
+        "545x39": 50,
+        "7.62x39": 50,
+        "7.62x54mmR": 50,
+        ".45ACP": 50,
+        "12GA Buck": 50,
+        "12GA Bean": 50
+      }
+    },
+    "Click Click Boom": {
+      description: "Kill an enemy player with a claymore.",
+      discounts: {
+        "US/RUS Grenades": 20,
+        "POX Vial": 20,
+        "Flashbangs": 20,
+        "Land Mines": 20,
+        "Claymores": 20,
+        "Plastic Explosives": 20,
+        "IED Container": 20
+      }
+    },
+    Roadkill: {
+      description: "Flatten a player with a vehicle at a speed of 70km/h or more.",
+      discounts: {
+        "Car Radiator": 25,
+        "Car Battery": 25,
+        "Truck Battery": 25,
+        "Spark Plug": 25,
+        "Glow Plug": 25,
+        "Car Tires": 25,
+        "Humvee Tires": 25,
+        "Humvee": 10,
+        "Truck Tires": 25
+      }
+    },
+    "All Your Base": {
+      description: "Raid an enemy flag during scheduled raid hours and turn in to the Trader within one hour.",
+      discounts: {
+        "Faction Flags": 100
+      }
+    },
+    "Hat Trick": {
+      description: "Sell 50 Hockey Sticks to Trader.",
+      bonuses: {
+        "Hockey Stick": 1500
+      }
+    },
+    "Meet Your Beat": {
+      description: "Turn in 50 Meat Tenderizers to Trader at once.",
+      bonuses: {
+        "Meat Tenderizers": 1000
+      }
+    },
+    "Big Game Hunter": {
+      description: "Bring in 6 Bear pelts , 12 wolf pelts, 6 Boar pelts, 20 deer pelts, and 5 Rabbit pelts at the same time.",
+      bonuses: {
+        "Bear Pelt": 1500,
+        "Wolf Pelt": 900,
+        "Deer Pelt": 600,
+        "Boar Pelt": 900
+      }
+    },
+    Hotshot: {
+      description: "Get a sniper kill at a range of over 400m.",
+      discounts: {
+        "M70 Tundra": 25,
+        "VS89": 25,
+        "SKS": 25,
+        "VSD": 25,
+        "PU Scope": 25,
+        "Hunter Scope": 25,
+        "10 Round VSD Mag": 25,
+        "10 Round VS89 Mag": 25,
+        "7.62x54mmR": 25,
+        ".308 WIN": 25,
+        "Rangefinder": 25
+      }
+    },
+    Deadshot: {
+      description: "Get a sniper kill at a range of over 800m.",
+      discounts: {
+        "M70 Tundra": 50,
+        "VS89": 50,
+        "SKS": 25,
+        "Mosin": 50,
+        "VSD": 50,
+        "PU Scope": 50,
+        "Hunter Scope": 50,
+        "10 Round VSD Mag": 50,
+        "10 Round VS89 Mag": 50,
+        "7.62x54mmR": 50,
+        ".308 WIN": 50,
+        "Rangefinder": 50
+      }
+    },
+    "Dr. Greenthumb": {
+      description: "Sell 1200 pieces of Cannabis in a single trip.",
+      bonuses: {
+        Cannabis: 30
+      }
+    },
+    "Marlboro Man": {
+      description: "Sell 250 Cigarettes in a single trip.",
+      bonuses: {
+        Cigarettes: 500
+      }
+    },
+    "Day One": {                                         
+      description: "Special pricing for founding members.",
+      discounts: {},
+      bonuses: {}
+    }
+  };
+
+  // END OF ITEMS AND ROLES
+  document.addEventListener("DOMContentLoaded", function() {
+    const buyItemButtonsDiv = document.getElementById("buyItemButtons");
+    const sellItemButtonsDiv = document.getElementById("itemButtons");
+    const sellSummaryDiv = document.getElementById("sellSummary");
+    const buySummaryDiv = document.getElementById("buySummary");
+    const rolesContainer1 = document.getElementById("roleColumn1");
+    const rolesContainer2 = document.getElementById("roleColumn2");
+    const clearAllBtn = document.getElementById("clearAllBtn");
+    const clearRolesBtn = document.getElementById("clearRolesBtn");
+    const calculateBtn = document.getElementById("calculateBtn");
+    const tablinks = document.getElementsByClassName("tablinks");
+    let buyNavigationStack = [buyitems];
+    let sellNavigationStack = [sellitems];
+    populateBuyButtons(buyitems, buyItemButtonsDiv, true);
+    populateSellButtons();
+    populateRoles();
+    attachEventListeners();
+
+    function populateBuyButtons(items, container, isTopCategory = false) {
+      container.innerHTML = "";
+      Object.keys(items).forEach((category) => {
+        let button = document.createElement("button");
+        button.textContent = category;
+        button.className = "item-button";
+        if (Array.isArray(items[category])) {
+          button.onclick = () => {
+            buyNavigationStack.push(items); // Push the current items to the navigation stack
+            container.innerHTML = "";
+            items[category].forEach((item) => {
+              let itemButton = document.createElement("button");
+              itemButton.textContent = item.name;
+              itemButton.className = "item-button";
+              itemButton.onclick = () => handleBuyItemClick(item);
+              container.appendChild(itemButton);
+            });
+            addReturnButton(container, "buy");
+          };
+        } else {
+          button.onclick = () => {
+            buyNavigationStack.push(items); // Push the current items to the navigation stack
+            populateBuyButtons(items[category], container, false);
+          };
+        }
+        container.appendChild(button);
+      });
+      if (!isTopCategory) addReturnButton(container, "buy");
+    }
+
+    function addReturnButton(container, type) {
+      let returnButton = document.createElement("button");
+      returnButton.textContent = "←";
+      returnButton.className = "return-button";
+      returnButton.onclick = () => {
+        if (type === "buy") {
+          if (buyNavigationStack.length > 1) {
+            buyNavigationStack.pop(); // Remove the current level from the stack
+            const previousCategory = buyNavigationStack[buyNavigationStack.length - 1];
+            populateBuyButtons(previousCategory, container, buyNavigationStack.length === 1);
+          } else {
+            populateBuyButtons(buyitems, container, true); // Return to top level if stack is empty
+          }
+        } else if (type === "sell") {
+          if (sellNavigationStack.length > 1) {
+            sellNavigationStack.pop(); // Remove the current level from the stack
+            populateSellButtons(); // Return to sell items list
+          } else {
+            populateSellButtons(); // Return to top level if stack is empty
+          }
+        }
+      };
+      container.appendChild(returnButton);
+    }
+
+    function populateBulkOptions(container, item, summaryDiv, type) {
+      container.innerHTML = ""; // Clear container
+      item.bulkOptions.forEach((quantity) => {
+        let buttonText = `${item.name} x ${quantity}`;
+        createButton(container, buttonText, () =>
+          addItemToSummary(item.name, quantity, item.price, summaryDiv)
+        );
+      });
+      if (type === "sell" && !["Tanned Leather"].includes(item.name)) {
+        createButton(container, "Role Turn-In", () => {
+          handleRoleTurnIn(item, summaryDiv);
+        });
+      }
+      addReturnButton(container, type); // Ensure the return button is added in the bulk options view with the correct type
+    }
+
+    function handleBuyItemClick(item) {
+      if (item.bulkOptions) {
+        populateBulkOptions(buyItemButtonsDiv, item, buySummaryDiv, "buy");
+      } else if (item.name === "IED Complete") {
+        addItemToSummary("IED Container", 1, 400, buySummaryDiv);
+        addItemToSummary("Plastic Explosives", 2, 3000, buySummaryDiv);
+        addItemToSummary("Detonator", 1, 100, buySummaryDiv);
+      } else if (item.name === "Humvee") {
+        addItemToSummary("Humvee", 1, 15000, buySummaryDiv);
+        alert("Purchased Humvee will last until destroyed or until car wipe!");
+      } else {
+        addItemToSummary(item.name, 1, item.price, buySummaryDiv);
+      }
+    }
+
+    function handleSellItemClick(item) {
+      if (item.bulkOptions) {
+        populateBulkOptions(sellItemButtonsDiv, item, sellSummaryDiv, "sell");
+      } else {
+        addItemToSummary(item.name, 1, item.price, sellSummaryDiv);
+      }
+    }
+
+    function clearItemButtons(itemButtonsDiv) {
+      itemButtonsDiv.innerHTML = "";
+    }
+
+    function createButton(container, text, onClick, className = "item-button") {
+      let button = document.createElement("button");
+      button.textContent = text;
+      button.className = className;
+      button.onclick = onClick;
+      container.appendChild(button);
+    }
+
+    function addItemToSummary(itemName, quantity, basePrice, summaryDiv) {
+      let existingItemDiv = Array.from(summaryDiv.children).find(
+        (div) => div.dataset.itemName === itemName
+      );
+      if (existingItemDiv) {
+        let existingQuantity = parseInt(existingItemDiv.dataset.quantity);
+        let newQuantity = existingQuantity + quantity;
+        existingItemDiv.dataset.quantity = newQuantity;
+        updateSummaryItem(existingItemDiv, newQuantity, basePrice);
+      } else {
+        let div = document.createElement("div");
+        div.dataset.itemName = itemName;
+        div.dataset.quantity = quantity;
+        div.dataset.basePrice = basePrice;
+        updateSummaryItem(div, quantity, basePrice);
+        summaryDiv.appendChild(div);
+      }
+      if (itemName === "Bible") adjustBiblePricing(summaryDiv);
+      updateSummaries();
+    }
+
+    function adjustBiblePricing(summaryDiv) {
+      let bibleDiv = Array.from(summaryDiv.children).find(
+        (div) => div.dataset.itemName === "Bible"
+      );
+      if (bibleDiv) {
+        let quantity = parseInt(bibleDiv.dataset.quantity);
+        let totalPrice;
+        if (quantity === 1) {
+          totalPrice = 10000;
+        } else if (quantity === 2) {
+          totalPrice = 30000; // 20000 + 10000
+        } else if (quantity === 3) {
+          totalPrice = 40000; // 30000 + 10000
+        } else if (quantity >= 4) {
+          totalPrice = 60000; // 40000 + 20000
+        }
+        bibleDiv.dataset.basePrice = totalPrice / quantity; // Update base price for Bible
+        updateSummaryItem(bibleDiv, quantity, totalPrice / quantity);
+      }
+    }
+
+    function handleRoleTurnIn(item, summaryDiv) {
+      switch (item.name) {
+        case "Cannabis":
+          addItemToSummary(item.name, 1200, item.price, summaryDiv);
+          break;
+        case "Cigarettes":
+          addItemToSummary(item.name, 250, item.price, summaryDiv);
+          break;
+        case "Hockey Stick":
+          addItemToSummary(item.name, 50, item.price, summaryDiv);
+          break;
+        case "Meat Tenderizers":
+          addItemToSummary(item.name, 50, item.price, summaryDiv);
+          break;
+        case "Set of 4 Teddy Bears":
+          addItemToSummary(item.name, 5, item.price, summaryDiv);
+          break;
+        case "Books":
+          addItemToSummary(item.name, 350, item.price, summaryDiv);
+          addItemToSummary("Bible", 1, 10000, summaryDiv);
+          break;
+        case "Bear Pelt":
+          addItemToSummary("Bear Pelt", 6, 1000, summaryDiv);
+          addItemToSummary("Wolf Pelt", 12, 600, summaryDiv);
+          addItemToSummary("Boar Pelt", 6, 600, summaryDiv);
+          addItemToSummary("Deer Pelt", 20, 400, summaryDiv);
+          addItemToSummary("Rabbit Pelt", 20, 250, summaryDiv);
+          break;
+        case "Boar Pelt":
+          addItemToSummary("Bear Pelt", 6, 1000, summaryDiv);
+          addItemToSummary("Wolf Pelt", 12, 600, summaryDiv);
+          addItemToSummary("Boar Pelt", 6, 600, summaryDiv);
+          addItemToSummary("Deer Pelt", 20, 400, summaryDiv);
+          addItemToSummary("Rabbit Pelt", 20, 250, summaryDiv);
+          break;
+        case "Wolf Pelt":
+          addItemToSummary("Bear Pelt", 6, 1000, summaryDiv);
+          addItemToSummary("Wolf Pelt", 12, 600, summaryDiv);
+          addItemToSummary("Boar Pelt", 6, 600, summaryDiv);
+          addItemToSummary("Deer Pelt", 20, 400, summaryDiv);
+          addItemToSummary("Rabbit Pelt", 20, 250, summaryDiv);
+          break;
+        case "Deer Pelt":
+          addItemToSummary("Bear Pelt", 6, 1000, summaryDiv);
+          addItemToSummary("Wolf Pelt", 12, 600, summaryDiv);
+          addItemToSummary("Boar Pelt", 6, 600, summaryDiv);
+          addItemToSummary("Deer Pelt", 20, 400, summaryDiv);
+          addItemToSummary("Rabbit Pelt", 20, 250, summaryDiv);
+          break;
+        case "Rabbit Pelt":
+          addItemToSummary("Bear Pelt", 6, 1000, summaryDiv);
+          addItemToSummary("Wolf Pelt", 12, 600, summaryDiv);
+          addItemToSummary("Boar Pelt", 6, 600, summaryDiv);
+          addItemToSummary("Deer Pelt", 20, 400, summaryDiv);
+          addItemToSummary("Rabbit Pelt", 20, 250, summaryDiv);
+          break;
+        default:
+          console.log("No role turn-in available for this item.");
+      }
+    }
+
+    function updateSummaryItem(div, quantity, basePrice) {
+      let itemName = div.dataset.itemName;
+      let discountedPrice = calculateDiscountedPrice(itemName, basePrice);
+      let totalPrice = discountedPrice * quantity;
+      div.innerHTML = `${itemName} x ${quantity} = ${totalPrice.toFixed(
+    0
+  )} Cr <button class="removeOneBtn" style="background-color: orange;">x</button><button class="removeAllBtn" style="background-color: red;">x</button>`;
+      div.querySelector(".removeOneBtn").addEventListener("click", () => {
+        removeOneItem(div);
+      });
+      div.querySelector(".removeAllBtn").addEventListener("click", () => {
+        let summaryDiv = div.parentElement;
+        summaryDiv.removeChild(div);
+        updateSummaries();
+      });
+    }
+
+    function removeOneItem(div) {
+      let quantity = parseInt(div.dataset.quantity);
+      if (quantity > 1) {
+        let newQuantity = quantity - 1;
+        div.dataset.quantity = newQuantity;
+        updateSummaryItem(div, newQuantity, parseFloat(div.dataset.basePrice));
+      } else {
+        let summaryDiv = div.parentElement;
+        summaryDiv.removeChild(div);
+        updateSummaries();
+      }
+    }
+
+    function populateSellButtons() {
+      const itemButtonsDiv = document.getElementById("itemButtons");
+      clearItemButtons(itemButtonsDiv);
+      sellitems.forEach(item => {
+        createButton(itemButtonsDiv, item.name, () => handleSellItemClick(item));
+      });
+      createButton(itemButtonsDiv, "Pelts", () => {
+        clearItemButtons(itemButtonsDiv);
+        pelts.forEach(pelt => {
+          createButton(itemButtonsDiv, pelt.name, () => handleSellItemClick(pelt));
+        });
+        addReturnButton(itemButtonsDiv, "sell");
+      });
+      addReturnButton(itemButtonsDiv, "sell");
+    }
+
+    function populateRoles() {
+      Object.keys(roles).forEach((role) => {
+        let button = document.createElement("button");
+        button.classList.add("role-btn");
+        button.textContent = role;
+        button.dataset.role = role;
+        let container = document.createElement("div");
+        container.appendChild(button);
+        if (Object.keys(roles).indexOf(role) % 2 === 0) {
+          rolesContainer1.appendChild(container);
+        } else {
+          rolesContainer2.appendChild(container);
+        }
+      });
+    }
+
+    function attachEventListeners() {
+      document.querySelectorAll(".role-btn").forEach((button) => {
+        button.addEventListener("click", function() {
+          this.classList.toggle("active");
+          updateRoleEffects();
+        });
+      });
+      clearAllBtn.addEventListener("click", clearAllTransactions);
+      clearRolesBtn.addEventListener("click", clearRoles);
+      calculateBtn.addEventListener("click", calculateAndShowTotals);
+      Array.from(tablinks).forEach((link) => {
+        link.addEventListener("click", function(event) {
+          openTab(event, this.getAttribute("data-tab"));
+        });
+      });
+      document.getElementById("buyTab").style.display = "block"; // Show the Buy tab initially
+      document
+        .querySelector(".tablinks[data-tab='buyTab']")
+        .classList.add("active");
+    }
+
+    function calculateDiscountedPrice(itemName, basePrice) {
+      let finalPrice = basePrice;
+      const activeRoles = Array.from(
+        document.querySelectorAll(".role-btn.active")
+      ).map((btn) => btn.dataset.role);
+      activeRoles.forEach((role) => {
+        let roleDetails = roles[role];
+        if (roleDetails.discounts && roleDetails.discounts[itemName]) {
+          let discount = roleDetails.discounts[itemName] / 100;
+          finalPrice = Math.min(finalPrice, basePrice * (1 - discount));
+        }
+        if (roleDetails.bonuses && roleDetails.bonuses[itemName]) {
+          finalPrice = roleDetails.bonuses[itemName];
+        }
+      });
+      return finalPrice;
+    }
+
+    function clearAllTransactions() {
+      document
+        .querySelectorAll(".summary")
+        .forEach((div) => (div.innerHTML = ""));
+      updateSummaries();
+    }
+
+    function clearRoles() {
+      document
+        .querySelectorAll(".role-btn")
+        .forEach((button) => button.classList.remove("active"));
+      updateRoleEffects();
+    }
+
+    function calculateAndShowTotals() {
+      let totalBuy = calculateTotal(buySummaryDiv);
+      let totalSell = calculateTotal(sellSummaryDiv);
+      let foundingMemberActive = document
+        .querySelector('.role-btn[data-role="Day One"]')
+        ?.classList.contains("active");
+      let message = "";
+      if (foundingMemberActive) {
+        // Apply a 10% discount to the total buy price if Founding Member is active
+        let discountBuyTotal = totalBuy * 0.9;
+        message = `Total Buy (FM): ${discountBuyTotal.toFixed(
+      0
+    )} Cr\nTotal Sell: ${totalSell.toFixed(0)} Cr`;
+      } else {
+        // Standard message if Founding Member is not active
+        message = `Total Buy: ${totalBuy.toFixed(
+      0
+    )} Cr\nTotal Sell: ${totalSell.toFixed(0)} Cr`;
+      }
+      alert(message);
+    }
+
+    function calculateTotal(summaryDiv) {
+      return Array.from(summaryDiv.querySelectorAll("div")).reduce((acc, div) => {
+        let quantity = parseInt(div.dataset.quantity);
+        let itemName = div.dataset.itemName;
+        let basePrice = parseFloat(div.dataset.basePrice);
+        let adjustedPrice = calculateDiscountedPrice(itemName, basePrice);
+        return acc + adjustedPrice * quantity;
+      }, 0);
+    }
+
+    function openTab(evt, tabName) {
+      let tabcontent = document.getElementsByClassName("tabcontent");
+      let tablinks = document.getElementsByClassName("tablinks");
+      Array.from(tabcontent).forEach(
+        (content) => (content.style.display = "none")
+      );
+      Array.from(tablinks).forEach((link) => link.classList.remove("active"));
+      document.getElementById(tabName).style.display = "block";
+      evt.currentTarget.classList.add("active");
+    }
+
+    function updateSummaries() {
+      // Recalculate and update the summaries for both buy and sell tabs
+      ["buy", "sell"].forEach((type) => {
+        const summaryDiv = document.getElementById(type + "Summary");
+        const summaryItems = summaryDiv.querySelectorAll("div");
+        summaryItems.forEach((div) => {
+          const itemName = div.dataset.itemName;
+          const quantity = parseInt(div.dataset.quantity);
+          const basePrice = parseFloat(div.dataset.basePrice);
+          const discountedPrice = calculateDiscountedPrice(itemName, basePrice);
+          const totalPrice = discountedPrice * quantity;
+          // Update the displayed text for each summary item
+          div.innerHTML = `${itemName} x ${quantity} = ${totalPrice.toFixed(
+        0
+      )} Cr <button class="removeOneBtn" style="background-color: orange;">x</button><button class="removeAllBtn" style="background-color: red;">x</button>`;
+          // Reattach the event listener to the remove button after updating innerHTML
+          div.querySelector(".removeOneBtn").addEventListener("click", () => {
+            removeOneItem(div);
+          });
+          div.querySelector(".removeAllBtn").addEventListener("click", () => {
+            summaryDiv.removeChild(div);
+            updateSummaries();
+          });
+        });
+      });
+    }
+
+    function updateRoleEffects() {
+      updateSummaries();
+    }
+  });
+</script>
+</body>
+
+</html>
