@@ -426,7 +426,7 @@
             price: 2000
           },
           {
-            name: "Vaiga",
+            name: "R12",
             price: 2000
           }
         ],
@@ -449,10 +449,6 @@
           {
             name: "VSD",
             price: 2500    
-          },
-          {
-            name: "Mosin",
-            price: 2000
           }
         ],
         Misc: [{
@@ -517,10 +513,7 @@
             price: 100
           }
         ],
-        "Weapon Parts": [{
-            name: "LAR Lightweight Buttstock",
-            price: 100
-          },
+        "Weapon Parts": [
           {
             name: "LAR Polymer Buttstock",
             price: 100
@@ -530,19 +523,15 @@
             price: 100
           },
           {
-            name: "M4 Polymer Handguard",
+            name: "M4 Rail Handguard",
             price: 100
           },
           {
-            name: "M4 MP Handguard",
+            name: "KA Rail Handguard",
             price: 100
           },
           {
-            name: "KA Handguard",
-            price: 100
-          },
-          {
-            name: "KA Buttstock",
+            name: "KA Poly Buttstock",
             price: 100
           }
         ]
@@ -584,6 +573,14 @@
           {
             name: "Hunter Scope",     //add new scopes
             price: 300
+          },
+          {
+            name: "MK4 Scope",     //add new scopes
+            price: 500
+          },
+          {
+            name: "Sporting Optic",     //add new scopes
+            price: 300
           }
         ],
         "NV Optics": [{
@@ -597,29 +594,14 @@
         ]
       },
       Magazines: {
-        "Auto Mags": [{
-            name: "40 Round C-Mag",
-            price: 500
-          },
+        "Auto Mags": [
           {
             name: "60 Round C-Mag",
             price: 800
           },
           {
-            name: "30 Round KAM Poly Mag",
-            price: 200
-          },
-          {
             name: "75 Round KAM Drum Mag",
             price: 600
-          },
-          {
-            name: "20 Round Vaiga Drum Mag",
-            price: 200
-          },
-          {
-            name: "30 Round AUR Mag",
-            price: 350
           }
         ],
         "Sniper Mags": [{
@@ -750,19 +732,7 @@
           price: 300
         },
         {
-          name: "Witch Hood",
-          price: 500
-        },
-        {
-          name: "BDU Helmet",
-          price: 800
-        },
-        {
-          name: "Desert Helmet",
-          price: 800
-        },
-        {
-          name: "Woodland Helmet",
+          name: "Ballistic Helmet",
           price: 800
         }
       ],
@@ -814,6 +784,10 @@
         {
           name: "Black Sling",     //add black sling bags for 200
           price: 200
+        },
+        {
+          name: "Black Army Pouch",     //add black sling bags for 200
+          price: 300
         }
       ],
       "Plate Carriers": [{
@@ -876,15 +850,7 @@
           price: 500
         },
         {
-          name: "Tan Jungle Boots",
-          price: 300
-        },
-        {
-          name: "Green Jungle Boots",
-          price: 300
-        },
-        {
-          name: "Hunter Boots",
+          name: "Tan Assault Boots",
           price: 300
         }
       ],
@@ -936,10 +902,6 @@
         {
           name: "Piggy Ski Mask",
           price: 200
-        },
-	{
-          name: "Shemagh Headwrap",
-          price: 1000
         },
         {
           name: "Mime Mask",
@@ -1474,7 +1436,6 @@
         "Glow Plug": 25,
         "Car Tires": 25,
         "Humvee Tires": 25,
-        "Humvee": 10,
         "Truck Tires": 25
       }
     },
@@ -1490,7 +1451,7 @@
         "Hockey Stick": 1500
       }
     },
-    "Meet Your Beat": {
+    "Meet My Beat": {
       description: "Turn in 50 Meat Tenderizers to Trader at once.",
       bonuses: {
         "Meat Tenderizers": 1000
@@ -1502,7 +1463,9 @@
         "Bear Pelt": 1500,
         "Wolf Pelt": 900,
         "Deer Pelt": 600,
-        "Boar Pelt": 900
+        "Boar Pelt": 900,
+        "Fox Pelt": 450,
+        "Rabbit Pelt": 375
       }
     },
     Hotshot: {
@@ -1727,7 +1690,7 @@
     function handleRoleTurnIn(item, summaryDiv) {
       switch (item.name) {
         case "Cannabis":
-          addItemToSummary(item.name, 1200, item.price, summaryDiv);
+          addItemToSummary(item.name, 1000, item.price, summaryDiv);
           break;
         case "Cigarettes":
           addItemToSummary(item.name, 250, item.price, summaryDiv);
@@ -1736,7 +1699,7 @@
           addItemToSummary(item.name, 50, item.price, summaryDiv);
           break;
         case "Meat Tenderizers":
-          addItemToSummary(item.name, 50, item.price, summaryDiv);
+          addItemToSummary(item.name, 200, item.price, summaryDiv);
           break;
         case "Set of 4 Teddy Bears":
           addItemToSummary(item.name, 5, item.price, summaryDiv);
